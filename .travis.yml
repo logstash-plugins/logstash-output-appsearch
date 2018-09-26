@@ -1,0 +1,15 @@
+---
+sudo: required
+services: docker
+addons:
+  apt:
+    packages:
+      - docker-ce
+matrix:
+  include:
+  - env: ELASTIC_STACK_VERSION=5.6.12
+  - env: ELASTIC_STACK_VERSION=6.4.1
+  - env: ELASTIC_STACK_VERSION=7.0.0-alpha1-SNAPSHOT
+  fast_finish: true
+install: ci/unit/docker-test.sh
+script: ci/unit/run.sh
