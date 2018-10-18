@@ -1,0 +1,100 @@
+:plugin: appsearch
+:type: output
+:default_codec: plain
+
+///////////////////////////////////////////
+START - GENERATED VARIABLES, DO NOT EDIT!
+///////////////////////////////////////////
+:version: %VERSION%
+:release_date: %RELEASE_DATE%
+:changelog_url: %CHANGELOG_URL%
+:include_path: ../../../../logstash/docs/include
+///////////////////////////////////////////
+END - GENERATED VARIABLES, DO NOT EDIT!
+///////////////////////////////////////////
+
+[id="plugins-{type}s-{plugin}"]
+
+=== App Search output plugin
+
+include::{include_path}/plugin_header.asciidoc[]
+
+==== Description
+
+This output lets you send events to Elastic's App Search solution.
+
+This gem does not support codec customization.
+
+[id="plugins-{type}s-{plugin}-options"]
+==== Http Output Configuration Options
+
+This plugin supports the following configuration options plus the <<plugins-{type}s-{plugin}-common-options>> described later.
+
+  config :api_key, :validate => :password, :required => true
+  config :document_id, :validate => :string
+  config :engine, :validate => :string, :required => true
+  config :host, :validate => :string, :required => true
+  config :store_timestamp, :validate => :string
+
+[cols="<,<,<",options="header",]
+|=======================================================================
+|Setting |Input type|Required
+| <<plugins-{type}s-{plugin}-api_key>> |<<password,password>>|No
+| <<plugins-{type}s-{plugin}-document_id>> |<<string,string>>|No
+| <<plugins-{type}s-{plugin}-engine>> |<<string,string>>|No
+| <<plugins-{type}s-{plugin}-host>> |<<string,string>>|No
+| <<plugins-{type}s-{plugin}-store_timestamp>> |<<string,string>>|No
+|=======================================================================
+
+Also see <<plugins-{type}s-{plugin}-common-options>> for a list of options supported by all
+output plugins.
+
+&nbsp;
+
+[id="plugins-{type}s-{plugin}-api_key"]
+===== `api_key`
+
+  * Value type is <<password,password>>
+  * There is no default value
+
+How many times should the client retry a failing URL. We highly recommend NOT setting this value
+to zero if keepalive is enabled. Some servers incorrectly end keepalives early requiring a retry!
+Note: if `retry_non_idempotent` is set only GET, HEAD, PUT, DELETE, OPTIONS, and TRACE requests will be retried.
+
+[id="plugins-{type}s-{plugin}-document_id"]
+===== `document_id`
+
+  * Value type is <<string,string>>
+  * There is no default value
+
+What to use as id for app search documents. This can be an interpolated value
+like `myapp-%{sequence_id}`.
+
+[id="plugins-{type}s-{plugin}-engine"]
+===== `engine`
+
+  * Value type is <<string,string>>
+  * There is no default value
+
+The Engine name. Engine is your search engine created in App Search, an information repository that includes the indexed document records.
+
+[id="plugins-{type}s-{plugin}-host"]
+===== `host`
+
+  * Value type is <<string,string>>
+  * There is no default value
+
+The hostname of the App Search API that is associated with your App Search account.
+
+[id="plugins-{type}s-{plugin}-store_timestamp"]
+===== `store_timestamp`
+
+  * Value type is <<string,string>>
+  * There is no default value
+
+Where to move the timestamp value that all Logstash events contain in the `@timestamp` field. Since App Search doesn't support fields starting with `@timestamp`, by default this field will be deleted. If you wish to keep it, set this value to the name of the field where `@timestamp` will be copied to.
+
+[id="plugins-{type}s-{plugin}-common-options"]
+include::{include_path}/{type}.asciidoc[]
+
+:default_codec!:
