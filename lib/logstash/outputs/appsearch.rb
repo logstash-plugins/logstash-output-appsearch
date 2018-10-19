@@ -20,8 +20,19 @@ class LogStash::Outputs::AppSearch < LogStash::Outputs::Base
 
   public
   def multi_receive(events)
-    return if events.empty?
-    documents = events.map do |event|
+    # because App Search has a limit of 100 documents per bulk
+    events.each_slice(100) do |events|
+      batch = format_batch(events)
+      if @logger.trace?
+        @logger.trace("Sending bulk to AppSearch", :size => batch.size, :data => batch.inspect)
+      end
+      index(batch)
+    end
+  end
+
+  private
+  def format_batch(events)
+    events.map do |event|
       doc = event.to_hash
       # we need to remove default fields that start with "@"
       # since appsearch doesn't accept them
@@ -36,18 +47,13 @@ class LogStash::Outputs::AppSearch < LogStash::Outputs::Base
       doc.delete("@version")
       doc
     end
-    if @logger.trace?
-      @logger.trace("Sending bulk to AppSearch", :size => documents.size, :data => documents.inspect)
-    end
-    index(documents)
   end
 
-  private
   def index(documents)
     response = @client.index_documents(@engine, documents)
     report(documents, response)
   rescue => e
-    @logger.error("Failed to execute index operation. Retrying..", :reason => e.message)
+    @logger.error("Failed to execute index operation. Retrying..", :exception => e.class, :reason => e.message)
     sleep(1)
     retry
   end
