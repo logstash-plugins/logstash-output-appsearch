@@ -10,7 +10,7 @@ class LogStash::Outputs::AppSearch < LogStash::Outputs::Base
   config :engine, :validate => :string, :required => true
   config :host, :validate => :string, :required => true
   config :api_key, :validate => :password, :required => true
-  config :store_timestamp, :validate => :string
+  config :timestamp_destination, :validate => :string
   config :document_id, :validate => :string
 
   public
@@ -36,8 +36,8 @@ class LogStash::Outputs::AppSearch < LogStash::Outputs::Base
       doc = event.to_hash
       # we need to remove default fields that start with "@"
       # since appsearch doesn't accept them
-      if @store_timestamp
-        doc[@store_timestamp] = doc.delete("@timestamp")
+      if @timestamp_destination
+        doc[@timestamp_destination] = doc.delete("@timestamp")
       else # delete it
         doc.delete("@timestamp")
       end
