@@ -16,6 +16,15 @@ class LogStash::Outputs::AppSearch < LogStash::Outputs::Base
   public
   def register
     @client = Client.new(@host, @api_key.value)
+    @client.get_engine(@engine)
+  rescue => e
+    if e.message =~ /401/
+      raise ::LogStash::ConfigurationError.new("Failed to connect to App Search. Error: 401. Please check your credentials")
+    elsif e.message =~ /404/
+      raise ::LogStash::ConfigurationError.new("Failed to connect to App Search. Error: 404. Please check if host '#{@host}' is correct and you've created an engine with name '#{@engine}'")
+    else
+      raise ::LogStash::ConfigurationError.new("Failed to connect to App Search. #{e.message}")
+    end
   end
 
   public

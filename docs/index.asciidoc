@@ -22,6 +22,16 @@ include::{include_path}/plugin_header.asciidoc[]
 ==== Description
 
 This output lets you send events to Elastic's App Search solution.
+On receiving a batch of events from the Logstash pipeline, the plugin
+will convert the events into documents and use App Search's bulk API
+to index multiple events in one request.
+
+Because App Search doesn't allow fields to being with `@timestamp`,
+by default the fields `@timestamp` and `@version` will be removed from
+each event prior to being sent to App Search. If you want to keep
+the `@timestamp` field you can use the
+<<plugins-{type}s-{plugin}-timestamp_destination,timestamp_destination>> option
+to store this timestamp in a different field.
 
 This gem does not support codec customization.
 
