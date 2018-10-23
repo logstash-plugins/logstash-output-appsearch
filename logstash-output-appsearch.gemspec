@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
   s.name          = 'logstash-output-appsearch'
-  s.version       = '0.1.0'
+  s.version       = '1.0.0.beta1'
   s.licenses      = ['Apache-2.0']
   s.summary       = 'Index data to Elastic App Search'
-  s.description   = 'Index data to Elastic App Search'
+  s.description   = 'This gem is a Logstash plugin required to be installed on top of the Logstash core pipeline using $LS_HOME/bin/logstash-plugin install gemname. This gem is not a stand-alone program'
   s.homepage      = 'https://elastic.co'
-  s.authors       = ['Joao Duarte']
-  s.email         = 'jsvduarte@gmail.com'
+  s.authors       = ['Joao Duarte', 'Elastic']
+  s.email         = 'info@elastic.co'
   s.require_paths = ['lib']
 
   # Files
