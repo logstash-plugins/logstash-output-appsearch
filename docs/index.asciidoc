@@ -22,6 +22,16 @@ include::{include_path}/plugin_header.asciidoc[]
 ==== Description
 
 This output lets you send events to Elastic's App Search solution.
+On receiving a batch of events from the Logstash pipeline, the plugin
+will convert the events into documents and use App Search's bulk API
+to index multiple events in one request.
+
+Because App Search doesn't allow fields to being with `@timestamp`,
+by default the fields `@timestamp` and `@version` will be removed from
+each event prior to being sent to App Search. If you want to keep
+the `@timestamp` field you can use the
+<<plugins-{type}s-{plugin}-timestamp_destination,timestamp_destination>> option
+to store this timestamp in a different field.
 
 This gem does not support codec customization.
 
@@ -30,20 +40,14 @@ This gem does not support codec customization.
 
 This plugin supports the following configuration options plus the <<plugins-{type}s-{plugin}-common-options>> described later.
 
-  config :api_key, :validate => :password, :required => true
-  config :document_id, :validate => :string
-  config :engine, :validate => :string, :required => true
-  config :host, :validate => :string, :required => true
-  config :store_timestamp, :validate => :string
-
 [cols="<,<,<",options="header",]
 |=======================================================================
 |Setting |Input type|Required
-| <<plugins-{type}s-{plugin}-api_key>> |<<password,password>>|No
+| <<plugins-{type}s-{plugin}-api_key>> |<<password,password>>|Yes
 | <<plugins-{type}s-{plugin}-document_id>> |<<string,string>>|No
-| <<plugins-{type}s-{plugin}-engine>> |<<string,string>>|No
-| <<plugins-{type}s-{plugin}-host>> |<<string,string>>|No
-| <<plugins-{type}s-{plugin}-store_timestamp>> |<<string,string>>|No
+| <<plugins-{type}s-{plugin}-engine>> |<<string,string>>|Yes
+| <<plugins-{type}s-{plugin}-host>> |<<string,string>>|Yes
+| <<plugins-{type}s-{plugin}-timestamp_destination>> |<<string,string>>|No
 |=======================================================================
 
 Also see <<plugins-{type}s-{plugin}-common-options>> for a list of options supported by all
@@ -57,9 +61,7 @@ output plugins.
   * Value type is <<password,password>>
   * There is no default value
 
-How many times should the client retry a failing URL. We highly recommend NOT setting this value
-to zero if keepalive is enabled. Some servers incorrectly end keepalives early requiring a retry!
-Note: if `retry_non_idempotent` is set only GET, HEAD, PUT, DELETE, OPTIONS, and TRACE requests will be retried.
+The private API Key with write permissions. Visit the https://app.swiftype.com/as/credentials[Credentials] in the App Search dashboard to find the key associated with your account.
 
 [id="plugins-{type}s-{plugin}-document_id"]
 ===== `document_id`
@@ -68,7 +70,7 @@ Note: if `retry_non_idempotent` is set only GET, HEAD, PUT, DELETE, OPTIONS, and
   * There is no default value
 
 What to use as id for app search documents. This can be an interpolated value
-like `myapp-%{sequence_id}`.
+like `myapp-%{sequence_id}`. Reusing ids will cause documents to be rewritten.
 
 [id="plugins-{type}s-{plugin}-engine"]
 ===== `engine`
@@ -86,8 +88,8 @@ The Engine name. Engine is your search engine created in App Search, an informat
 
 The hostname of the App Search API that is associated with your App Search account.
 
-[id="plugins-{type}s-{plugin}-store_timestamp"]
-===== `store_timestamp`
+[id="plugins-{type}s-{plugin}-timestamp_destination"]
+===== `timestamp_destination`
 
   * Value type is <<string,string>>
   * There is no default value
