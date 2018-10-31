@@ -1,10 +1,10 @@
 # encoding: utf-8
 require "logstash/devutils/rspec/spec_helper"
-require "logstash/outputs/appsearch"
+require "logstash/outputs/elastic_app_search"
 require "logstash/codecs/plain"
 require "logstash/event"
 
-describe LogStash::Outputs::AppSearch do
+describe LogStash::Outputs::ElasticAppSearch do
   let(:sample_event) { LogStash::Event.new }
   let(:host) { "test-host" }
   let(:api_key) { "my_key" }
