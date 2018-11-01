@@ -1,6 +1,6 @@
 :plugin: appsearch
 :type: output
-:default_codec: plain
+:no_codec:
 
 ///////////////////////////////////////////
 START - GENERATED VARIABLES, DO NOT EDIT!
@@ -107,4 +107,4 @@ To keep the timestamp field, set this value to the name of the field where you w
 [id="plugins-{type}s-{plugin}-common-options"]
 include::{include_path}/{type}.asciidoc[]
 
-:default_codec!:
+:no_codec!:
