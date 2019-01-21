@@ -1,4 +1,4 @@
-:plugin: appsearch
+:plugin: elastic_app_search
 :type: output
 :no_codec:
 

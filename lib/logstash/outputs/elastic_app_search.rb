@@ -1,11 +1,10 @@
 # encoding: utf-8
 require "logstash/outputs/base"
-require 'logstash-output-appsearch_jars.rb'
+require 'logstash-output-elastic_app_search_jars.rb'
 java_import com.swiftype.appsearch.Client
 
-# An appsearch output that does nothing.
-class LogStash::Outputs::AppSearch < LogStash::Outputs::Base
-  config_name "appsearch"
+class LogStash::Outputs::ElasticAppSearch < LogStash::Outputs::Base
+  config_name "elastic_app_search"
 
   config :engine, :validate => :string, :required => true
   config :host, :validate => :string, :required => true
@@ -44,7 +43,7 @@ class LogStash::Outputs::AppSearch < LogStash::Outputs::Base
     events.map do |event|
       doc = event.to_hash
       # we need to remove default fields that start with "@"
-      # since appsearch doesn't accept them
+      # since Elastic App Search doesn't accept them
       if @timestamp_destination
         doc[@timestamp_destination] = doc.delete("@timestamp")
       else # delete it

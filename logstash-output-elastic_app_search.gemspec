@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name          = 'logstash-output-appsearch'
+  s.name          = 'logstash-output-elastic_app_search'
   s.version       = '1.0.0.beta1'
   s.licenses      = ['Apache-2.0']
   s.summary       = 'Index data to Elastic App Search'
