@@ -12,10 +12,15 @@ class LogStash::Outputs::AppSearch < LogStash::Outputs::Base
   config :api_key, :validate => :password, :required => true
   config :timestamp_destination, :validate => :string
   config :document_id, :validate => :string
+  config :service_type, :validate => :string 
 
   public
   def register
-    @client = Client.new(@host, @api_key.value)
+    if @service_type == "self-managed"
+      @client = Client.new(nil, @api_key.value, @host)
+    else
+      @client = Client.new(@host, @api_key.value)
+    end
     @client.get_engine(@engine)
   rescue => e
     if e.message =~ /401/
